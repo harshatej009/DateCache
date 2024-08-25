@@ -1,5 +1,12 @@
 package harsh.rane.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -11,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import harsh.rane.dao.ElementDao;
+import harsh.rane.entity.ElementEntity;
 import harsh.rane.model.Element;
 import harsh.rane.service.OrderService;
 
@@ -19,15 +27,31 @@ public class DataCacheController {
 
 	@Autowired
 	ElementDao elementdao;
-
-	@GetMapping(path = "/elements")
-	public Element Check() {
-
-		return elementdao.getElements();
-	}
 	
 	@Autowired
 	OrderService orderService;
+
+	
+	@GetMapping(path = "/elements")
+	public List<ElementEntity> fetchElements() {
+	return elementdao.getElements();
+	}
+	
+	@PostMapping(path = "/elements")
+	 public ResponseEntity<Void> addElements(@RequestBody Element element) throws InterruptedException, ParseException {
+	 ElementEntity entity = new ElementEntity();
+	 
+	 entity.setElement_id(Integer.valueOf(element.getElement_id()));
+	 entity.setElement_name(element.getElement_name());
+	 entity.setElement_ctgy_name(element.getElement_ctgy_name());
+	 
+	 Date date = new SimpleDateFormat("MMddyyyy", Locale.ENGLISH).parse(element.getEffective_date());
+	 
+	 entity.setEffective_date(date);
+	 entity.setElement_skey(element.getElement_skey());
+	 elementdao.addElements(entity);
+	 return ResponseEntity.ok(null);
+	 }
 	
 	@PostMapping(path = "/process")
 	 public ResponseEntity<Void> process(@RequestBody Element element) throws InterruptedException {

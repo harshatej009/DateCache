@@ -1,20 +1,26 @@
 package harsh.rane.dao;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import harsh.rane.model.Element;
+import harsh.rane.entity.ElementEntity;
+import harsh.rane.repository.ElementRepository;
 
 @Component
 public class ElementDao {
 
-
-	public Element getElements()
+	@Autowired
+	ElementRepository elementRepository;
+	
+	public List<ElementEntity> getElements()
 	{
-		return  Element.builder()
-				.element_id("1").element_name("Ferrari")
-				.element_skey("car")
-				.element_ctgy_name("sports car")
-				.build();
-		
+		return elementRepository.findAll();
+	}
+	
+	public ElementEntity addElements(ElementEntity element)
+	{
+		return elementRepository.save(element);
 	}
 }
