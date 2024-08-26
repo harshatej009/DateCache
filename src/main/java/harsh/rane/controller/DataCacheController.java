@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import harsh.rane.dao.ElementDao;
 import harsh.rane.entity.ElementEntity;
 import harsh.rane.model.Element;
+import harsh.rane.service.ElementToElementEntityTransformer;
 import harsh.rane.service.OrderService;
 
 @RestController
@@ -39,17 +40,7 @@ public class DataCacheController {
 	
 	@PostMapping(path = "/elements")
 	 public ResponseEntity<Void> addElements(@RequestBody Element element) throws InterruptedException, ParseException {
-	 ElementEntity entity = new ElementEntity();
-	 
-	 entity.setElement_id(Integer.valueOf(element.getElement_id()));
-	 entity.setElement_name(element.getElement_name());
-	 entity.setElement_ctgy_name(element.getElement_ctgy_name());
-	 
-	 Date date = new SimpleDateFormat("MMddyyyy", Locale.ENGLISH).parse(element.getEffective_date());
-	 
-	 entity.setEffective_date(date);
-	 entity.setElement_skey(element.getElement_skey());
-	 elementdao.addElements(entity);
+	 elementdao.addElements(new ElementToElementEntityTransformer().apply(element));
 	 return ResponseEntity.ok(null);
 	 }
 	

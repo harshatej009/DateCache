@@ -9,7 +9,7 @@ import lombok.ToString;
 @Data
 @Builder
 public class Element {
-	private String element_id;
+	
 	private String element_name;
 	private String element_ctgy_name;
 	private String effective_date;
