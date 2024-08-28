@@ -25,6 +25,7 @@ public class RequestResponseLoggingFilter implements Filter {
 		
 		System.err.println("Starting a RequestResponseLoggingFilter for req : {}" + req.getRequestURI());
 		System.err.println("Committing a RequestResponseLoggingFilter for req : {}" + req.getAuthType());
+		System.err.println("Committing a response : {}" + res.getStatus());
 		chain.doFilter(request, response);
 	}
 

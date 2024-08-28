@@ -8,13 +8,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Generated;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 
 @Builder
@@ -22,6 +25,9 @@ import lombok.RequiredArgsConstructor;
 @Entity
 @Data
 @Table(name = "element")
+@JsonPropertyOrder({ "effective_date", "element_name" })
+@JsonIgnoreProperties({ "element_ctgy_name" })
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ElementEntity {
 
 	@Id
@@ -29,7 +35,10 @@ public class ElementEntity {
 	private int element_id;
 	private String element_name;
 	private String element_ctgy_name;
+	@JsonProperty("date")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date effective_date;
+	@JsonIgnore
 	private String element_skey;
 	
 	public ElementEntity (int id, String name, String cat, Date date, String skey) {

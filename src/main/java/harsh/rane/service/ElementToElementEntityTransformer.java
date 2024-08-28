@@ -6,18 +6,26 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import harsh.rane.entity.ElementEntity;
 import harsh.rane.model.Element;
 
+@Component
 public class ElementToElementEntityTransformer implements Function<Element, ElementEntity>{
+	
+	@Autowired
+	Element ele;
 
 	@Override
 	public ElementEntity apply(Element element) {
 		String sDate = element.getEffective_date();
+		System.err.println(ele);
 		return ElementEntity.builder()
 				 .element_ctgy_name(element.getElement_ctgy_name())
 				 .element_name(element.getElement_name())
-				 .element_skey(element.getElement_skey())
+				 .element_skey(null)
 				 .effective_date(getConvertedDate(sDate))
 				 .build();
 	}
